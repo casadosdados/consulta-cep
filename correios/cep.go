@@ -132,7 +132,6 @@ func Request() *gorequest.SuperAgent {
 	proxy := os.Getenv("CEP_PROXY")
 	if proxy != "" {
 		g.Proxy(proxy)
-		g.SetDebug(true)
 	}
 	return g
 }

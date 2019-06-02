@@ -41,7 +41,7 @@ func GETConsulta(e echo.Context) error {
 		result, err = correios.Search(query, page)
 	}
 	if err != nil{
-		return e.JSON(http.StatusNotFound, err)
+		return e.JSON(http.StatusNotFound, map[string]interface{}{"error": err})
 	}
 	return e.JSON(http.StatusOK, result)
 
