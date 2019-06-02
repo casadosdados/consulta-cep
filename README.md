@@ -44,3 +44,9 @@ docker run --name cep -p 8000:8000 -d casadosdados/consulta-cep
 ```bash
 curl -H "Accept: application/json" "http://localhost:8000/consulta/cep?q=avenida paulista"
 ```
+
+***
+CSV com os CEPs capturados no portal dos correios (não existe nenhuma garantia que tenha todos os cep)
+Este arquivo contém 888.596 ceps
+
+https://github.com/casadosdados/consulta-cep/releases/download/0.0.2/cep-20190602.csv.gz
