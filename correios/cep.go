@@ -1,7 +1,6 @@
 package correios
 
 import (
-	"encoding/base64"
 	"errors"
 	"github.com/PuerkitoBio/goquery"
 	"github.com/parnurzeal/gorequest"
@@ -51,14 +50,10 @@ func Search(q string, page int) (*CollectionCEP, error) {
 	if pageIni == 0 {
 		pageIni = 1
 	}
-	auth := "cdd:cdd"
-	basicAuth := "Basic " + base64.StdEncoding.EncodeToString([]byte(auth))
 	res, body, errs := Request().Post(URL).
 		Set("User-Agent","Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.108 Safari/537.36").
 		Set("Origin","http://www.buscacep.correios.com.br").
 		Set("Referer","http://www.buscacep.correios.com.br/sistemas/buscacep/buscaCepEndereco.cfm").
-		Set("Proxy-Authorization", basicAuth).
-		Proxy("http://191.252.186.230:8090").
 		Type("form-data").
 		Send("relaxation=" + q).
 		Send("tipoCEP=ALL").
@@ -135,8 +130,9 @@ func Request() *gorequest.SuperAgent {
 
 	// usa proxy caso exista nas variaveis de ambiente
 	proxy := os.Getenv("CEP_PROXY")
-	if (proxy != "") {
+	if proxy != "" {
 		g.Proxy(proxy)
+		g.SetDebug(true)
 	}
 	return g
 }
