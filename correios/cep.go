@@ -7,6 +7,7 @@ import (
 	"github.com/parnurzeal/gorequest"
 	"io"
 	"math/rand"
+	"os"
 	"regexp"
 	"strconv"
 	"strings"
@@ -131,6 +132,12 @@ func Request() *gorequest.SuperAgent {
 	g := gorequest.New()
 	g.Timeout(20 * time.Second)
 	g.Set("user-agent", userAgentRandom())
+
+	// usa proxy caso exista nas variaveis de ambiente
+	proxy := os.Getenv("CEP_PROXY")
+	if (proxy != "") {
+		g.Proxy(proxy)
+	}
 	return g
 }
 

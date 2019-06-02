@@ -3,13 +3,17 @@ package main
 import (
 	"github.com/casadosdados/consulta-cep/correios"
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"net/http"
 	"strconv"
 )
 
 func main() {
 	e := echo.New()
-	e.GET("/consulta", GETConsulta)
+	e.Use(middleware.Logger())
+	e.Use(middleware.Recover())
+
+	e.GET("/correios/cep", GETConsulta)
 	e.Logger.Fatal(e.Start(":8000"))
 }
 
@@ -21,8 +25,15 @@ func GETConsulta(e echo.Context) error {
 	if err != nil {
 		page = 1
 	}
-
+	if page <= 0 || page > 9 {
+		return e.JSON(http.StatusNoContent, nil)
+	}
+	// correios não aceita consulta vazia
+	if query == "" {
+		return e.JSON(http.StatusNoContent, nil)
+	}
 	var result *correios.CollectionCEP
+	// máximo de 1000 resultados
 	if all != "" {
 		result = correios.SearchALL(query)
 		err = nil
